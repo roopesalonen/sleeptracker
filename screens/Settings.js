@@ -1,14 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert } from 'react-native';
+import { logoutAuth } from '../components/Auth';
 
 export default function Settings() {
+
+    const handleLogout = logoutAuth();
+
     return (
-        <View style={styles.container}>
-            <Text style={{ fontSize: 20 }}>
-                Settings
-            </Text>
+        <View style={styles.container} >
+            <View style={styles.container}>
+                <Button title="Log out" onPress={handleLogout} />
+            </View>
             <StatusBar style="auto" />
-        </View>
+        </View >
     );
 }
 
@@ -18,5 +22,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    },
+    }
 });

@@ -45,7 +45,6 @@ const Weather = () => {
     if (errorMsg) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Weather</Text>
                 <Text style={styles.errorText}>{errorMsg}</Text>
             </View>
         )
@@ -54,7 +53,6 @@ const Weather = () => {
     if (!API_KEY) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Weather</Text>
                 <Text style={styles.errorText}>Invalid API key</Text>
             </View>
         )
@@ -70,7 +68,6 @@ const Weather = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Weather</Text>
             <Text style={styles.temp}>{Math.round(weather.main.temp)}°C</Text>
             <Text style={styles.desc}>{weather.weather[0].description}</Text>
             <Image style={styles.icon} source={{ uri: `http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png` }} />
@@ -81,17 +78,10 @@ const Weather = () => {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 20,
     },
     flexcenter: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
     },
     temp: {
         fontSize: 30,

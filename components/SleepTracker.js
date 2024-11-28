@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { app } from '../firebaseConfig';
+import { app, auth } from '../firebaseConfig';
 import { getDatabase, ref, set } from 'firebase/database';
 
 export default function App() {
@@ -12,16 +12,31 @@ export default function App() {
 
     const database = getDatabase(app);
 
-    const userId = 'testUser';
+    const userId = auth.currentUser ? auth.currentUser.uid : null;
 
     const saveSleepData = () => {
+
+        // Confirm user is logged in
+        if (!userId) {
+            Alert.alert('Error', 'User not authenticated.');
+            return;
+        }
+
         if (sleepTime && wakeTime) {
 
+            let fixedWakeTime = new Date(wakeTime);
+
+                // Check if wake time is before sleep time
+            if (wakeTime <= sleepTime) {
+                // Add one day to wake time
+                fixedWakeTime.setDate(fixedWakeTime.getDate() + 1);
+            }
+
             // Get sleep time in hours and minutes
-            const sleepOnlyMinutes = (wakeTime - sleepTime) / (1000 * 60);
-            const sleepOnlyHours = (wakeTime - sleepTime) / (1000 * 60 * 60);
-            const sleepHours = Math.floor(sleepOnlyMinutes / 60);
-            const sleepMinutes = sleepOnlyMinutes % 60;
+            const sleepInMinutes = (fixedWakeTime - sleepTime) / (1000 * 60);
+            const sleepInHours = sleepInMinutes / 60;
+            const sleepHours = Math.floor(sleepInHours);
+            const sleepMinutes = sleepInMinutes % 60;
 
             // 'DD-MM-YYYY' format
             const date = new Date(sleepTime).toLocaleDateString('fi-FI').replace(/\./g, '-');
@@ -32,8 +47,8 @@ export default function App() {
             set(sleepDataRef, {
                 hours: sleepHours,
                 minutes: sleepMinutes,
-                onlyHours: sleepOnlyHours,
-                onlyMinutes: sleepOnlyMinutes,
+                onlyHours: sleepInHours,
+                onlyMinutes: sleepInMinutes,
             })
                 .then(() => {
                     Alert.alert('Success', `${sleepHours} hours and ${sleepMinutes} minutes of sleep data saved.`);
@@ -49,22 +64,23 @@ export default function App() {
     // Set sleep time
     const onChangeSleepTime = (event, selectedDate) => {
         setSleepPicker(false);
-        if (selectedDate) {
+        // Confirm time is set
+        if (event.type === 'set' && selectedDate) {
             setSleepTime(selectedDate);
         }
     };
+
     // Set wake time
     const onChangeWakeTime = (event, selectedDate) => {
         setWakePicker(false);
-        if (selectedDate) {
+        // Confirm time is set
+        if (event.type === 'set' && selectedDate) {
             setWakeTime(selectedDate);
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Sleep Tracker</Text>
-
             <View style={styles.pickerContainer}>
                 <Button
                     onPress={() => setSleepPicker(true)}
@@ -74,13 +90,12 @@ export default function App() {
                     <DateTimePicker
                         value={sleepTime || new Date()}
                         mode="time"
-                        is24Hour={true}
-                        display="default"
+                        display="spinner"
                         onChange={onChangeSleepTime}
                     />
                 )}
                 <Text style={styles.time}>
-                    Sleep time: {sleepTime ? sleepTime.toLocaleTimeString('fi-FI', {hour: '2-digit', minute: '2-digit'}) : ''}
+                    Sleep time: {sleepTime ? sleepTime.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' }) : ''}
                 </Text>
             </View>
 
@@ -93,13 +108,12 @@ export default function App() {
                     <DateTimePicker
                         value={wakeTime || new Date()}
                         mode="time"
-                        is24Hour={true}
-                        display="default"
+                        display="spinner"
                         onChange={onChangeWakeTime}
                     />
                 )}
                 <Text style={styles.time}>
-                    Wake time: {wakeTime ? wakeTime.toLocaleTimeString('fi-FI', {hour: '2-digit', minute: '2-digit'}) : ''}
+                    Wake time: {wakeTime ? wakeTime.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' }) : ''}
                 </Text>
             </View>
 
@@ -117,15 +131,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
         padding: 20,
-    },
-    title: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
     },
     time: {
         marginTop: 10,
@@ -134,6 +140,8 @@ const styles = StyleSheet.create({
     },
     pickerContainer: {
         marginBottom: 20,
+        marginRight: '20%',
+        marginLeft: '20%'
     },
     buttonContainer: {
         marginTop: 10,

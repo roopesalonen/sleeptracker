@@ -5,7 +5,7 @@ export default function Data() {
     return (
         <View style={styles.container}>
             <Text style={{ fontSize: 20 }}>
-                Data
+                Statistics
             </Text>
             <StatusBar style="auto" />
         </View>
