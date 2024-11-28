@@ -6,11 +6,11 @@ import SleepTracker from '../components/SleepTracker';
 export default function Tracker() {
     return (
         <View style={styles.container}>
-            <View style={{flex: 1, width: "100%", backgroundColor: "#abc"}}>
+            <View style={styles.upperSection}>
                 <Text style={styles.title}>Weather</Text>
                 <Weather/>
             </View>
-            <View style={{flex: 2, width: "100%", backgroundColor: "#adadad"}}>
+            <View style={styles.lowerSection}>
                 <Text style={styles.title}>Sleep Tracker</Text>
                 <SleepTracker/>
             </View>
@@ -22,13 +22,23 @@ export default function Tracker() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: "#011c3b",
         alignItems: 'center',
         justifyContent: 'center',
     },
     title: {
         fontSize: 30,
+        color: '#ffffff',
         textAlign: 'center',
         fontWeight: 'bold',
-        paddingTop: 20
-    }
+    },
+    upperSection: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    lowerSection: {
+        flex: 1,
+        alignItems: 'center',
+    },
 });

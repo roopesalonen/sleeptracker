@@ -85,13 +85,15 @@ const styles = StyleSheet.create({
     },
     temp: {
         fontSize: 30,
+        color: '#ffffff'
     },
     desc: {
         fontSize: 20,
+        color: '#ffffff'
     },
     icon: {
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
     },
     errorText: {
         color: 'red',

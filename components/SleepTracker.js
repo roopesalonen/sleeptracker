@@ -3,12 +3,14 @@ import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { app, auth } from '../firebaseConfig';
 import { getDatabase, ref, set } from 'firebase/database';
+import { format } from 'date-fns';
 
 export default function App() {
     const [sleepTime, setSleepTime] = useState(null);
     const [wakeTime, setWakeTime] = useState(null);
     const [sleepPicker, setSleepPicker] = useState(false);
     const [wakePicker, setWakePicker] = useState(false);
+    
 
     const database = getDatabase(app);
 
@@ -38,8 +40,8 @@ export default function App() {
             const sleepHours = Math.floor(sleepInHours);
             const sleepMinutes = sleepInMinutes % 60;
 
-            // 'DD-MM-YYYY' format
-            const date = new Date(sleepTime).toLocaleDateString('fi-FI').replace(/\./g, '-');
+            // DD-MM-YYYY format
+            const date = format(new Date(sleepTime), 'dd-MM-yyyy');
 
             const sleepDataRef = ref(database, `users/${userId}/sleep/${date}`);
 
@@ -137,6 +139,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 18,
         textAlign: 'center',
+        color: '#ffffff',
     },
     pickerContainer: {
         marginBottom: 20,
