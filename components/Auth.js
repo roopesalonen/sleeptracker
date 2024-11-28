@@ -33,28 +33,24 @@ export const registerAuth = (email, password) => {
     return handleRegister;
 };
 
-export const logoutAuth = () => {
-    const navigation = useNavigation();
-
-    const handleLogout = () => {
-        Alert.alert(
-            'Confirm',
-            'Do you want to log out?',
-            [
-                { text: 'Cancel' },
-                {
-                    text: 'Yes',
-                    onPress: async () => {
-                        try {
-                            await signOut(auth);
-                            navigation.replace('Login');
-                        } catch (error) {
-                            Alert.alert('Error', error.message);
-                        }
-                    },
+export const logoutAuth = (navigation) => {
+    Alert.alert(
+        'Confirm',
+        'Do you want to log out?',
+        [
+            { text: 'Cancel' },
+            {
+                text: 'Yes',
+                onPress: async () => {
+                    try {
+                        await signOut(auth);
+                        navigation.replace('Login');
+                    } catch (error) {
+                        Alert.alert('Error', error.message);
+                    }
                 },
-            ],
-        );
-    };
-    return handleLogout;
+            },
+        ],
+    );
 };
+

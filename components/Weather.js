@@ -20,7 +20,9 @@ const Weather = () => {
             }
 
             //Get location
-            let location = await Location.getCurrentPositionAsync({});
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.High,
+              });
             setLocation(location);
 
             //Fetch weather with coords
@@ -60,7 +62,7 @@ const Weather = () => {
 
     if (!weather) {
         return (
-            <View style={styles.flexcenter}>
+            <View style={styles.container}>
                 <ActivityIndicator size={70} color="#005fb3" />
             </View>
         )
@@ -77,10 +79,6 @@ const Weather = () => {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
-    },
-    flexcenter: {
-        flex: 1,
         alignItems: 'center',
     },
     temp: {

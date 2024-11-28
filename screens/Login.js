@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, StatusBar } from 'react-native';
 import { loginAuth, registerAuth } from '../components/Auth';
 
 export default function Login() {
@@ -11,6 +11,7 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#011c3b" />
       <Text style={styles.title}>Sleep Tracker</Text>
       <TextInput
         style={styles.text}

@@ -72,7 +72,13 @@ export default function SleepChart () {
                     backgroundGradientTo: '#011c3b',
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    propsForHorizontalLabels: {
+                        fontFamily: 'monospace', // Specify your desired font family
+                        fontWeight: 'bold',      // Set the font weight to bold
+                    },
                 }}
+                // Always start chart from zero
+                fromZero={true}
                 // Render hours and minutes slept to the chart
                 renderDotContent={({ x, y, index }) => {
                     // Convert total hours to hours and minutes
@@ -87,7 +93,7 @@ export default function SleepChart () {
                                 top: y - 20,
                                 left: x - 10,
                                 color: '#ffffff',
-                                fontSize: 10,
+                                fontSize: 12,
                             }}>
                             {hours}h {minutes}m
                         </Text>
